@@ -27,9 +27,9 @@ Only repo is mandatory if the repo containing translations is public, the transl
 
 ### .env File
 
-TRANS_REPO=owner/translations
-TRANS_PATH=test
-TRANS_HOST=github
-TRANS_FOLDER=translations
-TRANS_HOOKS=asdf1234 asdf1324
+TRANS_REPO=owner/translations\
+TRANS_PATH=test\
+TRANS_HOST=github\
+TRANS_FOLDER=translations\
+TRANS_HOOKS=asdf1234 asdf1324\
 TRANS_TOKEN=asdf1234asdf1234

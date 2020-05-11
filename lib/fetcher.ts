@@ -3,8 +3,8 @@ import nodeFetch, { HeadersInit, RequestInfo, RequestInit, Response } from 'node
 import { GIT_HOST_GITHUB, GIT_HOST_GITLAB, ProgramOptions, SupportedGitHosts } from './index';
 
 export interface TranslationInformation {
-	path: string
-	name: string
+	path: string;
+	name: string;
 }
 
 export class Fetcher {
@@ -16,7 +16,7 @@ export class Fetcher {
 		this.apiUrl = this._parseApiUrl()
 	}
 
-	async run() {
+	async run(): Promise<void> {
 		try {
 			const fileRegExp = RegExp('[a-z_-]+.json')
 			console.info("Starting translation fetch")
@@ -39,7 +39,7 @@ export class Fetcher {
 		}
 	}
 
-	private async _fetch(url: RequestInfo, appendHeader: boolean = false) {
+	private async _fetch(url: RequestInfo, appendHeader = false): Promise<Response> {
 		let headers: RequestInit
 
 		if (this.state.token && appendHeader) {
@@ -75,55 +75,55 @@ export class Fetcher {
 		}
 	}
 
-	private _urlSwitch(options: { [name in SupportedGitHosts]: string }) {
+	private _urlSwitch(options: { [name in SupportedGitHosts]: string }): string {
 		return options[this.state.host]
 	}
 
-	private async _triggerHooks() {
+	private async _triggerHooks(): Promise<void> {
 		console.info('Triggering Hooks')
 
-		await Promise.all(this.state.hooks.split(' ').map((el: any) => {
+		await Promise.all(this.state.hooks.split(' ').map(el => {
 			const url = `https://api.poeditor.com/webhooks/${el}`
 
 			return this._fetch(url)
 		}))
 	}
 
-	private async _timeout(duration: number) {
+	private async _timeout(duration: number): Promise<void> {
 		console.info(`Waiting ${duration / 1000} seconds for POEditor to commit changes`)
 
 		return await new Promise((resolve) => setTimeout(resolve, duration))
 	}
 
-	private async _getTranslationInfo() {
+	private async _getTranslationInfo(): Promise<Response> {
 		console.info('Fetching translation info')
 
-		let append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` })
+		const append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` })
 
 		const url = `${this.apiUrl}/${this.state.repo}${append}`
 
 		return await this._fetch(url, true)
 	}
 
-	private async _parseContent(file: Response) {
+	private async _parseContent(file: Response): Promise<Buffer> {
 		switch (this.state.host) {
 			case GIT_HOST_GITLAB:
 				return await file.buffer()
 			case GIT_HOST_GITHUB:
 				const content = await file.json()
-				return Buffer.from(content.content, content.encoding).toString()
+				return Buffer.from(content.content, content.encoding)
 			default:
 				return await file.json()
 		}
 	}
 
-	private async _fetchTranslations(data: Array<TranslationInformation>) {
+	private async _fetchTranslations(data: Array<TranslationInformation>): Promise<void> {
 		console.info('Downloading translations')
 
 		for await (const el of data) {
 			const fileUrl = el.path.replace('/', '%2F')
 
-			let append = this._urlSwitch({ gitlab: `/repository/files/${fileUrl}/raw?ref=master`, github: `/contents/${fileUrl}` })
+			const append = this._urlSwitch({ gitlab: `/repository/files/${fileUrl}/raw?ref=master`, github: `/contents/${fileUrl}` })
 
 			const file = await this._fetch(`${this.apiUrl}/${this.state.repo}${append}`, true)
 

@@ -10,12 +10,12 @@ export const GIT_HOST_GITLAB = 'gitlab'
 export const GIT_HOST_ALL: SupportedGitHosts[] = [GIT_HOST_GITHUB, GIT_HOST_GITLAB]//, 'bitbucket', 'azure']
 
 export interface ProgramOptions {
-	repo: string
-	path: string
-	host: SupportedGitHosts
-	folder: string
-	hooks?: string
-	token?: string
+	repo: string;
+	path: string;
+	host: SupportedGitHosts;
+	folder: string;
+	hooks?: string;
+	token?: string;
 }
 
 export type ProgramCommander = ProgramOptions | commander.CommanderStatic
@@ -29,7 +29,7 @@ const OPTION_FOLDER = 'folder'
 const OPTION_CONFIG = 'config'
 
 
-const main = async (argv = process.argv) => {
+const main = async (argv = process.argv): Promise<void> => {
 	const configIndex = argv.findIndex(el => el === '-c' || el === `--${OPTION_CONFIG}`)
 	let configPath = `${process.cwd()}/.env`
 
@@ -54,7 +54,7 @@ const main = async (argv = process.argv) => {
 		if (commander[el] === undefined || commander[el] === '') throw new Error(`Flag ${el} not defined`)
 	})
 
-	let program: ProgramOptions = commander as ProgramCommander as ProgramOptions
+	const program: ProgramOptions = commander as ProgramCommander as ProgramOptions
 
 	const fetcher = new Fetcher(program)
 
