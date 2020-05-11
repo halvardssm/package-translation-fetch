@@ -50,6 +50,8 @@ jobs:
 
       - name: Run tests
         run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        env:
+          npm_config_user: "root"
 
   publish:
     needs: test
