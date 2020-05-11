@@ -1,13 +1,13 @@
-import * as dotenv from 'dotenv'
 import commander from 'commander'
-import { Fetcher } from './fetcher'
+import * as dotenv from 'dotenv'
 import path from 'path'
+import { Fetcher } from './fetcher'
 
 export type SupportedGitHosts = 'github' | 'gitlab'//|'bitbucket'|'azure'
 
 export const GIT_HOST_GITHUB = 'github'
 export const GIT_HOST_GITLAB = 'gitlab'
-export const GIT_HOST_ALL: SupportedGitHosts[] = [GIT_HOST_GITHUB, GIT_HOST_GITLAB]//|'bitbucket'|'azure'
+export const GIT_HOST_ALL: SupportedGitHosts[] = [GIT_HOST_GITHUB, GIT_HOST_GITLAB]//, 'bitbucket', 'azure']
 
 export interface ProgramOptions {
 	repo: string

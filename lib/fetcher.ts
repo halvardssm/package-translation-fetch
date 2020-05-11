@@ -1,6 +1,6 @@
-import * as fs from 'fs'
-import nodeFetch, { RequestInfo, RequestInit, Response, HeaderInit, HeadersInit } from 'node-fetch';
-import { ProgramOptions, SupportedGitHosts, GIT_HOST_GITHUB, GIT_HOST_GITLAB, GIT_HOST_ALL } from './index';
+import * as fs from 'fs';
+import nodeFetch, { HeadersInit, RequestInfo, RequestInit, Response } from 'node-fetch';
+import { GIT_HOST_GITHUB, GIT_HOST_GITLAB, ProgramOptions, SupportedGitHosts } from './index';
 
 export interface TranslationInformation {
 	path: string
@@ -12,7 +12,7 @@ export class Fetcher {
 	private apiUrl: string
 
 	constructor(options: ProgramOptions) {
-		this.state = { ...this.state, ...options }
+		this.state = { ...options }
 		this.apiUrl = this._parseApiUrl()
 	}
 
@@ -48,8 +48,10 @@ export class Fetcher {
 			switch (this.state.host) {
 				case GIT_HOST_GITHUB:
 					headerToken = { 'Authorization': `token ${this.state.token}` }
+					break
 				case GIT_HOST_GITLAB:
 					headerToken = { 'Private-Token': this.state.token }
+					break
 			}
 
 			headers = { headers: headerToken }
@@ -98,7 +100,9 @@ export class Fetcher {
 
 		let append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` })
 
-		return await this._fetch(`${this.apiUrl}/${this.state.repo}${append}`, true)
+		const url = `${this.apiUrl}/${this.state.repo}${append}`
+
+		return await this._fetch(url, true)
 	}
 
 	private async _parseContent(file: Response) {
@@ -107,7 +111,7 @@ export class Fetcher {
 				return await file.buffer()
 			case GIT_HOST_GITHUB:
 				const content = await file.json()
-				return content.content
+				return Buffer.from(content.content, content.encoding).toString()
 			default:
 				return await file.json()
 		}

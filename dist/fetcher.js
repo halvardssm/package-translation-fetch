@@ -31,7 +31,7 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const index_1 = require("./index");
 class Fetcher {
     constructor(options) {
-        this.state = Object.assign(Object.assign({}, this.state), options);
+        this.state = Object.assign({}, options);
         this.apiUrl = this._parseApiUrl();
     }
     run() {
@@ -61,8 +61,10 @@ class Fetcher {
                 switch (this.state.host) {
                     case index_1.GIT_HOST_GITHUB:
                         headerToken = { 'Authorization': `token ${this.state.token}` };
+                        break;
                     case index_1.GIT_HOST_GITLAB:
                         headerToken = { 'Private-Token': this.state.token };
+                        break;
                 }
                 headers = { headers: headerToken };
             }
@@ -104,7 +106,8 @@ class Fetcher {
         return __awaiter(this, void 0, void 0, function* () {
             console.info('Fetching translation info');
             let append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` });
-            return yield this._fetch(`${this.apiUrl}/${this.state.repo}${append}`, true);
+            const url = `${this.apiUrl}/${this.state.repo}${append}`;
+            return yield this._fetch(url, true);
         });
     }
     _parseContent(file) {
@@ -114,7 +117,7 @@ class Fetcher {
                     return yield file.buffer();
                 case index_1.GIT_HOST_GITHUB:
                     const content = yield file.json();
-                    return content.content;
+                    return Buffer.from(content.content, 'base64').toString();
                 default:
                     return yield file.json();
             }
