@@ -20,14 +20,11 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: Install Yarn
-        run: npm install yarn -g
-
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: Build package
-        run: yarn build
+        run: npm build
 
   test:
     needs: build
@@ -42,13 +39,13 @@ jobs:
           node-version: '14.x'
 
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: ESLint check
         uses: stefanoeb/eslint-action@1.0.2
 
       - name: Run tests
-        run: yarn test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
@@ -72,10 +69,10 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: yarn publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
