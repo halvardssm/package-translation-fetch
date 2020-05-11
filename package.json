@@ -11,6 +11,7 @@
 		"build": "tsc && chmod +x ./dist/*",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
+		"pretest": "npm run build",
 		"test": "dist/bin.js",
 		"test:ts": "ts-node src/bin.ts"
 	},
