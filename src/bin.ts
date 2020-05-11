@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+
 import commander from 'commander'
 import * as dotenv from 'dotenv'
 import path from 'path'
-import { Fetcher } from './fetcher'
+import { Fetcher } from './bin-fetcher'
 
 export type SupportedGitHosts = 'github' | 'gitlab'//|'bitbucket'|'azure'
 
@@ -29,7 +31,7 @@ const OPTION_FOLDER = 'folder'
 const OPTION_CONFIG = 'config'
 
 
-const main = async (argv = process.argv): Promise<void> => {
+export async function main(argv = process.argv): Promise<void> {
 	const configIndex = argv.findIndex(el => el === '-c' || el === `--${OPTION_CONFIG}`)
 	let configPath = `${process.cwd()}/.env`
 
@@ -43,7 +45,7 @@ const main = async (argv = process.argv): Promise<void> => {
 	commander
 		.requiredOption(`-r, --${OPTION_REPO} <${OPTION_REPO}>`, 'the translation repo id, on gitlab this is the project id while on github this is the owner+repo name. E.g. 1234567, halvardssm/translations', process.env.TRANS_REPO)
 		.option(`-p, --${OPTION_PATH} <${OPTION_PATH}>`, 'path to the folder containing the translations, if empty it will take the root', process.env.TRANS_PATH || '.')
-		.option(`--${OPTION_HOST} <${OPTION_HOST}>`, 'the git host, can be one of: github, gitlab', process.env.TRANS_HOST || 'github')
+		.option(`--${OPTION_HOST} <${OPTION_HOST}>`, 'the git host, can be one of: github, gitlab', process.env.TRANS_HOST || GIT_HOST_GITHUB)
 		.option(`-f, --${OPTION_FOLDER} <${OPTION_FOLDER}>`, 'the download folder', process.env.TRANS_PATH || 'src/translations')
 		.option(`--${OPTION_HOOKS} <${OPTION_HOOKS}>`, 'string of webhook codes separated by space, ex: "123 123"', process.env.TRANS_HOOKS)
 		.option(`-t, --${OPTION_TOKEN} <${OPTION_TOKEN}>`, 'the authentication token', process.env.TRANS_TOKEN)
@@ -61,5 +63,6 @@ const main = async (argv = process.argv): Promise<void> => {
 	await fetcher.run()
 }
 
-export default main
-module.exports = main
+if (require.main === module) {
+	main(process.argv)
+}

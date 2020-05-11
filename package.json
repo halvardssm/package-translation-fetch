@@ -4,18 +4,16 @@
 	"repository": "github.com/halvardssm/package-translation-fetch.git",
 	"author": "Halvard Mørstad <contact@moerstad.no>",
 	"license": "MIT",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"bin": "./bin/main",
+	"main": "dist/bin.js",
+	"types": "dist/bin.d.ts",
+	"bin": "./dist/bin.js",
 	"scripts": {
-		"build": "npm run lint && tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
-		"lint": "eslint  --ext .ts lib",
-		"lint:fix": "eslint --ext .ts lib --fix",
-		"pretest": "npm build",
-		"test": "./bin/main",
-		"test:js": "node dist/index.js",
-		"test:ts": "ts-node lib/index.ts",
-		"ci:test": "node ./bin/main"
+		"build": "tsc",
+		"lint": "eslint  --ext .ts src",
+		"lint:fix": "eslint --ext .ts src --fix",
+		"pretest": "npm run build",
+		"test": "dist/bin.js",
+		"test:ts": "ts-node src/bin.ts"
 	},
 	"dependencies": {
 		"commander": "^4.1.1",

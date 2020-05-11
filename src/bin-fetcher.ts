@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 import * as fs from 'fs';
 import nodeFetch, { HeadersInit, RequestInfo, RequestInit, Response } from 'node-fetch';
-import { GIT_HOST_GITHUB, GIT_HOST_GITLAB, ProgramOptions, SupportedGitHosts } from './index';
+import { GIT_HOST_GITHUB, GIT_HOST_GITLAB, ProgramOptions, SupportedGitHosts } from './bin';
 
 export interface TranslationInformation {
 	path: string;
@@ -23,9 +25,10 @@ export class Fetcher {
 
 			const translationInfoRaw = await this._getTranslationInfo()
 
-			await this._triggerHooks()
-
-			await this._timeout(10000)
+			if (this.state.hooks) {
+				await this._triggerHooks()
+				await this._timeout(10000)
+			}
 
 			const translationInfo = (await translationInfoRaw.json() as Array<TranslationInformation>)
 				.filter((el) => fileRegExp.test(el.path))
@@ -80,6 +83,7 @@ export class Fetcher {
 	}
 
 	private async _triggerHooks(): Promise<void> {
+
 		console.info('Triggering Hooks')
 
 		await Promise.all(this.state.hooks.split(' ').map(el => {
@@ -87,6 +91,7 @@ export class Fetcher {
 
 			return this._fetch(url)
 		}))
+
 	}
 
 	private async _timeout(duration: number): Promise<void> {
@@ -98,9 +103,9 @@ export class Fetcher {
 	private async _getTranslationInfo(): Promise<Response> {
 		console.info('Fetching translation info')
 
-		const append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` })
+		const append = this._urlSwitch({ gitlab: `repository/tree?path=${this.state.repo}`, github: `${this.state.repo}/contents` })
 
-		const url = `${this.apiUrl}/${this.state.repo}${append}`
+		const url = `${this.apiUrl}/${append}`
 
 		return await this._fetch(url, true)
 	}
@@ -129,13 +134,14 @@ export class Fetcher {
 
 			const content = await this._parseContent(file)
 
-			const fileDownloadPath = `${process.cwd()}/${this.state.path}`
+			const fileDownloadPath = `${process.cwd()}/${this.state.folder}`
 
 			fs.mkdirSync(fileDownloadPath, { recursive: true })
 			fs.writeFileSync(
 				`${fileDownloadPath}/${el.name}`,
 				content
 			)
+
 			console.info(`${el.name} saved`)
 		}
 	}

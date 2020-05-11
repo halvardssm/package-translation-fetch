@@ -1,8 +1,9 @@
 {
 	"include": [
-		"lib/**/*"
+		"src/**/*"
 	],
 	"compilerOptions": {
+		"declaration": true,
 		"module": "CommonJS",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
