@@ -9,8 +9,8 @@
 	"bin": "./bin/main",
 	"scripts": {
 		"build": "npm run lint:fix && tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
-		"lint": "eslint lib --ext .ts",
-		"lint:fix": "eslint lib --ext .ts --fix",
+		"lint": "eslint  --ext .ts lib",
+		"lint:fix": "eslint --ext .ts lib --fix",
 		"pretest": "npm run build",
 		"test": "./bin/main",
 		"test:js": "node dist/index.js",
