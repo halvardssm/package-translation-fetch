@@ -1,0 +1,29 @@
+{
+	"name": "translation-fetch",
+	"version": "0.0.1",
+	"repository": "github.com/halvardssm/package-translation-fetch.git",
+	"author": "Halvard Mørstad <contact@moerstad.no>",
+	"license": "MIT",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": "./bin/main",
+	"scripts": {
+		"build": "tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
+		"pretest": "npm run build",
+		"test": "./bin/translations -p t",
+		"test:js": "node dist/index.js",
+		"test:ts": "ts-node lib/index.ts"
+	},
+	"dependencies": {
+		"commander": "^4.1.1",
+		"dotenv": "^8.2.0",
+		"loglevel": "^1.6.8",
+		"node-fetch": "^2.6.0"
+	},
+	"devDependencies": {
+		"@types/node": "^13.13.5",
+		"@types/node-fetch": "^2.5.7",
+		"ts-node": "^8.10.1",
+		"typescript": "^3.7.5"
+	}
+}
