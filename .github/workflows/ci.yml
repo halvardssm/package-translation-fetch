@@ -45,7 +45,7 @@ jobs:
         uses: stefanoeb/eslint-action@1.0.2
 
       - name: Run tests
-        run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: npm run ci:test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
