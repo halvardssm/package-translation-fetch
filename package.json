@@ -12,7 +12,6 @@
 		"lint": "eslint lib --ext .ts",
 		"lint:fix": "eslint lib --ext .ts --fix",
 		"pretest": "npm run build",
-		"prepublish": "npm run build",
 		"test": "./bin/main",
 		"test:js": "node dist/index.js",
 		"test:ts": "ts-node lib/index.ts"
