@@ -10,6 +10,7 @@
 	"scripts": {
 		"build": "tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
 		"pretest": "npm run build",
+		"prepublish": "npm run build",
 		"test": "./bin/main -p t",
 		"test:js": "node dist/index.js",
 		"test:ts": "ts-node lib/index.ts"

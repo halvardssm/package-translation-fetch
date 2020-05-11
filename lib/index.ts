@@ -45,9 +45,9 @@ const main = async (argv = process.argv) => {
 		.option(`-p, --${OPTION_PATH} <${OPTION_PATH}>`, 'path to the folder containing the translations, if empty it will take the root', process.env.TRANS_PATH || '.')
 		.option(`--${OPTION_HOST} <${OPTION_HOST}>`, 'the git host, can be one of: github, gitlab', process.env.TRANS_HOST || 'github')
 		.option(`-f, --${OPTION_FOLDER} <${OPTION_FOLDER}>`, 'the download folder', process.env.TRANS_PATH || 'src/translations')
-		.option(`-c, --${OPTION_CONFIG} <${OPTION_CONFIG}>`, 'path to the env file, defaults to ./.env', configPath)
 		.option(`--${OPTION_HOOKS} <${OPTION_HOOKS}>`, 'string of webhook codes separated by space, ex: "123 123"', process.env.TRANS_HOOKS)
-		.option(`-t, --${OPTION_TOKEN} <${OPTION_TOKEN}>`, 'the gitlab token', process.env.TRANS_TOKEN)
+		.option(`-t, --${OPTION_TOKEN} <${OPTION_TOKEN}>`, 'the authentication token', process.env.TRANS_TOKEN)
+		.option(`-c, --${OPTION_CONFIG} <${OPTION_CONFIG}>`, 'path to the env file, defaults to ./.env', configPath)
 		.parse(argv);
 
 	[OPTION_REPO].forEach(el => {
