@@ -6,16 +6,16 @@
 	"license": "MIT",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"bin": "./bin/main",
+	"bin": "./bin/main.sh",
 	"scripts": {
 		"build": "npm run lint && tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
 		"lint": "eslint  --ext .ts lib",
 		"lint:fix": "eslint --ext .ts lib --fix",
 		"pretest": "npm build",
-		"test": "./bin/main",
+		"test": "./bin/main.sh",
 		"test:js": "node dist/index.js",
 		"test:ts": "ts-node lib/index.ts",
-		"ci:test": "node ./bin/main"
+		"ci:test": "node ./bin/main.sh"
 	},
 	"dependencies": {
 		"commander": "^4.1.1",
