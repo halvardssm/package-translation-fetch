@@ -42,7 +42,9 @@ jobs:
         run: npm install
 
       - name: ESLint check
-        run: npm run lint
+        uses: stefanoeb/eslint-action@1.0.2
+		with:
+          files: src/
 
       - name: Run tests
         run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
