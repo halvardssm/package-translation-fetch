@@ -8,7 +8,7 @@
 	"types": "dist/index.d.ts",
 	"bin": "./bin/main",
 	"scripts": {
-		"build": "npm run lint:fix && tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
+		"build": "npm run lint && tsc && tsc --outFile dist/index.d.ts -d --emitDeclarationOnly",
 		"lint": "eslint  --ext .ts lib",
 		"lint:fix": "eslint --ext .ts lib --fix",
 		"pretest": "npm run build",
