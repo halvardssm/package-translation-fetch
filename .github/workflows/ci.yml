@@ -42,9 +42,11 @@ jobs:
         run: npm install
 
       - name: ESLint check
-        uses: stefanoeb/eslint-action@1.0.2
+        uses: Krizzu/eslint-check-action@v1.1.0
         with:
-          files: src
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+          eslintFiles: "src"
+          eslintExt: "ts"
 
       - name: Run tests
         run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
