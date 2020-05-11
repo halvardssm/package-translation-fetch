@@ -19,10 +19,10 @@ jobs:
         uses: actions/setup-node@v1
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build package
-        run: yarn build
+        run: npm build
 
   test:
     needs: build
@@ -35,16 +35,16 @@ jobs:
         uses: actions/setup-node@v1
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build package
-        run: yarn build
+        run: npm build
 
       - name: ESLint check
-        run: yarn run lint
+        run: npm run lint
 
       - name: Run tests
-        run: yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: npm test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
@@ -68,10 +68,10 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: yarn publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
