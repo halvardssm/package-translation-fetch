@@ -28,18 +28,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js for NPM
-        uses: actions/setup-node@v1
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build package
-        run: npm build
-
       - name: ESLint check
         run: npm run lint
 
