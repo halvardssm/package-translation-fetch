@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -15,17 +18,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv = __importStar(require("dotenv"));
 const commander_1 = __importDefault(require("commander"));
-const fetcher_1 = require("./fetcher");
+const dotenv = __importStar(require("dotenv"));
 const path_1 = __importDefault(require("path"));
+const fetcher_1 = require("./fetcher");
 exports.GIT_HOST_GITHUB = 'github';
 exports.GIT_HOST_GITLAB = 'gitlab';
-exports.GIT_HOST_ALL = [exports.GIT_HOST_GITHUB, exports.GIT_HOST_GITLAB]; //|'bitbucket'|'azure'
+exports.GIT_HOST_ALL = [exports.GIT_HOST_GITHUB, exports.GIT_HOST_GITLAB]; //, 'bitbucket', 'azure']
 const OPTION_REPO = 'repo';
 const OPTION_PATH = 'path';
 const OPTION_HOOKS = 'hooks';

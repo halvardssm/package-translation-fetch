@@ -117,7 +117,7 @@ class Fetcher {
                     return yield file.buffer();
                 case index_1.GIT_HOST_GITHUB:
                     const content = yield file.json();
-                    return Buffer.from(content.content, 'base64').toString();
+                    return Buffer.from(content.content, content.encoding).toString();
                 default:
                     return yield file.json();
             }
