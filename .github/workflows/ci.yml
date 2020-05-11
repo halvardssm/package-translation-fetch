@@ -26,6 +26,20 @@ jobs:
       - name: Build package
         run: npm build
 
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: ESLint check
+        uses: Krizzu/eslint-check-action@v1.1.0
+        with:
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+          eslintFiles: "src"
+          eslintExt: "ts"
+
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -41,20 +55,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: ESLint check
-        uses: Krizzu/eslint-check-action@v1.1.0
-        with:
-          ghToken: ${{ secrets.GITHUB_TOKEN }}
-          eslintFiles: "src"
-          eslintExt: "ts"
-
       - name: Run tests
         run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
         env:
           npm_config_user: "root"
 
   publish:
-    needs: test
+    needs: [ lint, test ]
     runs-on: ubuntu-latest
     if: contains(github.ref, 'master')
     steps:
