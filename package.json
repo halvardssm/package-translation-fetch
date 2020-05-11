@@ -9,7 +9,7 @@
 	"bin": "./dist/bin.js",
 	"scripts": {
 		"build": "tsc",
-		"lint": "eslint  --ext .ts src",
+		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
 		"pretest": "npm run build",
 		"test": "dist/bin.js",
@@ -24,9 +24,9 @@
 	"devDependencies": {
 		"@types/node": "^13.13.5",
 		"@types/node-fetch": "^2.5.7",
-		"@typescript-eslint/eslint-plugin": "^2.31.0",
-		"@typescript-eslint/parser": "^2.31.0",
-		"eslint": "^7.0.0",
+		"@typescript-eslint/eslint-plugin": "~2.31.0",
+		"@typescript-eslint/parser": "~2.31.0",
+		"eslint": "~6.7.0",
 		"ts-node": "^8.10.1",
 		"typescript": "^3.7.5"
 	}
