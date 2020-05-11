@@ -43,7 +43,7 @@ jobs:
 
       - name: ESLint check
         uses: stefanoeb/eslint-action@1.0.2
-		with:
+        with:
           files: src/
 
       - name: Run tests
