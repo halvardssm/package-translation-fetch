@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: node:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -26,31 +26,17 @@ jobs:
 
   test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: node:latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js for NPM
-        uses: actions/setup-node@v1
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build package
-        run: npm build
-
       - name: ESLint check
-        uses: hallee/eslint-action@master
-        with:
-          repo-token: ${{secrets.GITHUB_TOKEN}}
+        run: npm run lint
 
       - name: Run tests
         run: npm test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: node:latest
     if: contains(github.ref, 'master')
     steps:
       - name: Checkout repository
