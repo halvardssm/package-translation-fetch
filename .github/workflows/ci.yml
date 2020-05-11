@@ -10,17 +10,19 @@ on:
 
 jobs:
   build:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js for NPM
-      uses: actions/setup-node@v1
+      - name: Set up Node.js for NPM
+        uses: actions/setup-node@v1
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Build package
-      run: yarn build
+      - name: Build package
+        run: yarn build
 
   test:
     needs: build
