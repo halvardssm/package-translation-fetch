@@ -69,7 +69,7 @@ jobs:
       - name: Check version changes
         uses: EndBug/version-check@v1
         id: check
-		    with:
+        with:
           diff-search: true
 
       - name: Version update detected
