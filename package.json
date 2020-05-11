@@ -14,7 +14,8 @@
 		"pretest": "npm run build",
 		"test": "./bin/main",
 		"test:js": "node dist/index.js",
-		"test:ts": "ts-node lib/index.ts"
+		"test:ts": "ts-node lib/index.ts",
+		"github-ci:test": "./bin/main"
 	},
 	"dependencies": {
 		"commander": "^4.1.1",
