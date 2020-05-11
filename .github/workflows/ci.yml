@@ -48,6 +48,10 @@ jobs:
           eslintFiles: "src"
           eslintExt: "ts"
 
+      - name: Build package
+        run: npm build
+        run: chmod +x ./dist/*
+
       - name: Run tests
         run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
