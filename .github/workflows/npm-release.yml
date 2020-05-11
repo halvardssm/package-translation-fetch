@@ -1,0 +1,62 @@
+name: Nessie CI
+
+on: [ pull_request, release ]
+
+jobs:
+  cli:
+    name: Run CLI
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Install deno
+        uses: denolib/setup-deno@master
+        with: 
+          deno-version: 0.42.0
+      - name: Create migration
+        run: deno run --allow-read --allow-write --allow-net https://raw.githubusercontent.com/${{github.event.pull_request.head.repo.full_name}}/${{github.event.pull_request.head.ref}}/cli.ts make test
+        
+  tests:
+    needs: cli
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: pwd
+          POSTGRES_DB: nessie
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5000:5432
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_DATABASE: nessie
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 5001:3306
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@master
+      - name: Install deno
+        uses: denolib/setup-deno@master
+        with: 
+          deno-version: 0.42.0
+      - name: Check formatting
+        run: deno fmt --check
+      - name: Create SQLite db
+        run: make db-sqlite-start
+      - name: Run tests
+        run: make test
