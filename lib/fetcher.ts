@@ -1,14 +1,6 @@
 import * as fs from 'fs'
-import fetch from 'node-fetch';
-
-export interface FetcherOptions {
-	token: string
-	folder: string
-	downloadPath: string
-	repo: string
-	hooks: string[]
-	apiUrl?: string
-}
+import nodeFetch, { RequestInfo, RequestInit, Response, HeaderInit, HeadersInit } from 'node-fetch';
+import { ProgramOptions, SupportedGitHosts, GIT_HOST_GITHUB, GIT_HOST_GITLAB, GIT_HOST_ALL } from './index';
 
 export interface TranslationInformation {
 	path: string
@@ -16,34 +8,24 @@ export interface TranslationInformation {
 }
 
 export class Fetcher {
-	private token: string
-	private folder: string
-	private downloadPath: string
-	private repo: string
-	private hooks: string[]
-	private repoUrl: string
+	private state: ProgramOptions
+	private apiUrl: string
 
-	constructor({ token, hooks, folder, downloadPath, apiUrl, repo }: FetcherOptions) {
-		this.token = token
-		this.hooks = hooks
-		this.folder = folder
-		this.downloadPath = downloadPath
-		this.repo = repo
-		this.repoUrl = this._generateUrl(apiUrl)
+	constructor(options: ProgramOptions) {
+		this.state = { ...this.state, ...options }
+		this.apiUrl = this._parseApiUrl()
 	}
 
 	async run() {
 		try {
 			const fileRegExp = RegExp('[a-z_-]+.json')
-			console.log("Starting translation fetch")
+			console.info("Starting translation fetch")
 
-			await this._repoExistsFn()
+			const translationInfoRaw = await this._getTranslationInfo()
 
 			await this._triggerHooks()
 
 			await this._timeout(10000)
-
-			const translationInfoRaw = await this._getTranslationInfo()
 
 			const translationInfo = (await translationInfoRaw.json() as Array<TranslationInformation>)
 				.filter((el) => fileRegExp.test(el.path))
@@ -57,58 +39,100 @@ export class Fetcher {
 		}
 	}
 
-	private _generateUrl(apiUrl: string = 'https://gitlab.com/api/v4'): string {
-		const url = `${apiUrl}/projects/${this.repo}/repository`
+	private async _fetch(url: RequestInfo, appendHeader: boolean = false) {
+		let headers: RequestInit
 
-		return url
+		if (this.state.token && appendHeader) {
+			let headerToken: HeadersInit
+
+			switch (this.state.host) {
+				case GIT_HOST_GITHUB:
+					headerToken = { 'Authorization': `token ${this.state.token}` }
+				case GIT_HOST_GITLAB:
+					headerToken = { 'Private-Token': this.state.token }
+			}
+
+			headers = { headers: headerToken }
+		}
+
+		const result = await nodeFetch(url, headers)
+
+		if (result.status !== 200) throw new Error(`Fetch failed:\n${url}\n${await result.text()}`)
+
+		return result
 	}
 
-	private async _repoExistsFn() {
-		console.log('Checking if repo exists')
+	private _parseApiUrl(): string {
+		switch (this.state.host) {
+			case GIT_HOST_GITHUB:
+				return 'https://api.github.com/repos'
+			case GIT_HOST_GITLAB:
+				return 'https://gitlab.com/api/v4/projects'
+			default:
+				throw new Error('Git host not supported')
+		}
+	}
 
-		return await fetch(`${this.repoUrl}/tree`, { headers: { 'Private-Token': this.token } })
+	private _urlSwitch(options: { [name in SupportedGitHosts]: string }) {
+		return options[this.state.host]
 	}
 
 	private async _triggerHooks() {
-		console.log('Triggering Hooks')
+		console.info('Triggering Hooks')
 
-		await Promise.all(this.hooks.map((el: any) => {
+		await Promise.all(this.state.hooks.split(' ').map((el: any) => {
 			const url = `https://api.poeditor.com/webhooks/${el}`
 
-			console.log(`Triggering: ${url}`)
-
-			return fetch(url)
+			return this._fetch(url)
 		}))
 	}
 
-	private async _getTranslationInfo() {
-		console.log('Fetching translation info')
-
-		return await fetch(`${this.repoUrl}/tree?path=${this.folder}`, { headers: { 'Private-Token': this.token } })
-	}
-
 	private async _timeout(duration: number) {
-		console.log(`Waiting ${duration / 1000} seconds for POE to commit changes`)
+		console.info(`Waiting ${duration / 1000} seconds for POEditor to commit changes`)
 
 		return await new Promise((resolve) => setTimeout(resolve, duration))
 	}
 
+	private async _getTranslationInfo() {
+		console.info('Fetching translation info')
+
+		let append = this._urlSwitch({ gitlab: `/repository/tree?path=${this.state.folder}`, github: `/contents/${this.state.folder}` })
+
+		return await this._fetch(`${this.apiUrl}/${this.state.repo}${append}`, true)
+	}
+
+	private async _parseContent(file: Response) {
+		switch (this.state.host) {
+			case GIT_HOST_GITLAB:
+				return await file.buffer()
+			case GIT_HOST_GITHUB:
+				const content = await file.json()
+				return content.content
+			default:
+				return await file.json()
+		}
+	}
+
 	private async _fetchTranslations(data: Array<TranslationInformation>) {
-		console.log('Downloading translations')
+		console.info('Downloading translations')
 
 		for await (const el of data) {
 			const fileUrl = el.path.replace('/', '%2F')
 
-			const file = await fetch(`${this.repoUrl}/files/${fileUrl}/raw?ref=master`, { headers: { 'Private-Token': this.token } })
+			let append = this._urlSwitch({ gitlab: `/repository/files/${fileUrl}/raw?ref=master`, github: `/contents/${fileUrl}` })
 
-			const fileDownloadPath = `${process.cwd()}/${this.downloadPath}`
+			const file = await this._fetch(`${this.apiUrl}/${this.state.repo}${append}`, true)
+
+			const content = await this._parseContent(file)
+
+			const fileDownloadPath = `${process.cwd()}/${this.state.path}`
 
 			fs.mkdirSync(fileDownloadPath, { recursive: true })
 			fs.writeFileSync(
 				`${fileDownloadPath}/${el.name}`,
-				await file.buffer()
+				content
 			)
-			console.log(`${el.name} saved`)
+			console.info(`${el.name} saved`)
 		}
 	}
 }

@@ -1,42 +1,39 @@
-declare module "fetcher" {
-    export interface FetcherOptions {
-        token: string;
-        folder: string;
-        downloadPath: string;
+declare module "index" {
+    import commander from 'commander';
+    export type SupportedGitHosts = 'github' | 'gitlab';
+    export const GIT_HOST_GITHUB = "github";
+    export const GIT_HOST_GITLAB = "gitlab";
+    export const GIT_HOST_ALL: SupportedGitHosts[];
+    export interface ProgramOptions {
         repo: string;
-        hooks: string[];
-        apiUrl?: string;
+        path: string;
+        host: SupportedGitHosts;
+        folder: string;
+        hooks?: string;
+        token?: string;
     }
+    export type ProgramCommander = ProgramOptions | commander.CommanderStatic;
+    const main: (argv?: string[]) => Promise<void>;
+    export default main;
+}
+declare module "fetcher" {
+    import { ProgramOptions } from "index";
     export interface TranslationInformation {
         path: string;
         name: string;
     }
     export class Fetcher {
-        private token;
-        private folder;
-        private downloadPath;
-        private repo;
-        private hooks;
-        private repoUrl;
-        constructor({ token, hooks, folder, downloadPath, apiUrl, repo }: FetcherOptions);
+        private state;
+        private apiUrl;
+        constructor(options: ProgramOptions);
         run(): Promise<void>;
-        private _generateUrl;
-        private _repoExistsFn;
+        private _fetch;
+        private _parseApiUrl;
+        private _urlSwitch;
         private _triggerHooks;
-        private _getTranslationInfo;
         private _timeout;
+        private _getTranslationInfo;
+        private _parseContent;
         private _fetchTranslations;
     }
-}
-declare module "index" {
-    import commander from 'commander';
-    export interface ProgramOptions extends commander.CommanderStatic {
-        hooks: string;
-        repo: string;
-        folder: string;
-        token: string;
-        path: string;
-    }
-    const main: (argv?: string[]) => Promise<void>;
-    export default main;
 }
