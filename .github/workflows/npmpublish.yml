@@ -1,0 +1,26 @@
+name: Publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'master')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          image_name: halvardssm/package-translation-fetch/translations
+          dockerfile: .github/Dockerfile
+          username: halvardssm
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          push_git_tag: true
+
+      - name: Publish package to NPM
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 
