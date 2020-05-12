@@ -9,12 +9,12 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+      
       - name: Build Docker Image
         uses: whoan/docker-build-with-cache-action@v5
         with:
@@ -23,22 +23,15 @@ jobs:
           username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
-          tag_name: ${{github.repository_owner}}_${GITHUB_REF##*/}
+          push_image_and_stages: false
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Login to GitHub Package Registry
-        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+      - run: docker image ls
+      - run: echo ${{github.event}}
 
       - name: Run Tests
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{github.repository_owner}}_${GITHUB_REF##*/} yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
-  publish:
+  release:
     needs: test
     runs-on: ubuntu-latest
     if: contains(github.ref, 'master')
