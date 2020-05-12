@@ -43,7 +43,7 @@ jobs:
       - name: Version update detected
         if: steps.check.outputs.changed == 'true'
         run: 'echo "Version change found! Will run Release CI. New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-      
+
       - name: Create Release
         if: steps.check.outputs.changed == 'true'
         id: create_release
@@ -55,5 +55,18 @@ jobs:
           release_name: Release ${{steps.check.outputs.version}}
           draft: false
           prerelease: false
+      
+      - name: Build Docker Image
+        if: steps.create_release.outcome == 'Success'
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          image_name: halvardssm/package-translation-fetch/translations
+          dockerfile: .github/Dockerfile
+          username: halvardssm
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          push_git_tag: true
 
-      - run: echo ${{toJson(steps.create_release)}} | true
+      - name: Publish package to NPM
+        if: steps.create_release.outcome == 'Success'
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive
