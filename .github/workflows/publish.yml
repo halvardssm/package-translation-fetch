@@ -1,0 +1,17 @@
+name: Publish
+
+on: release
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'master')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Package Registry
+        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish package to NPM
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{ github.ref }} echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 

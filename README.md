@@ -1,6 +1,6 @@
 # Fetch
 
-![CI](https://github.com/halvardssm/package-translation-fetch/workflows/Translation%20Fetch%20CI/badge.svg)
+![CI](https://github.com/halvardssm/package-translation-fetch/workflows/CI/badge.svg)
 [![NPM version](https://img.shields.io/npm/v/translation-fetch.svg)](https://www.npmjs.com/package/translation-fetch)
 
 Download your POEditor translations as JSON to use with your favourite internationalization library.
