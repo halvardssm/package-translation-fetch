@@ -18,7 +18,7 @@ jobs:
       - name: Build Docker Image
         uses: whoan/docker-build-with-cache-action@v5
         with:
-          image_name: package-translation-fetch/translations:latest
+          image_name: package-translation-fetch/translations
           dockerfile: .github/Dockerfile
           username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
@@ -34,7 +34,7 @@ jobs:
       - name: Build Docker Image
         uses: whoan/docker-build-with-cache-action@v5
         with:
-          image_name: package-translation-fetch/translations:latest
+          image_name: package-translation-fetch/translations
           dockerfile: .github/Dockerfile
           username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
@@ -65,7 +65,7 @@ jobs:
         uses: whoan/docker-build-with-cache-action@v5
         if: steps.check.outputs.changed == 'true'
         with:
-          image_name: package-translation-fetch/translations:latest
+          image_name: package-translation-fetch/translations
           dockerfile: .github/Dockerfile
           username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
