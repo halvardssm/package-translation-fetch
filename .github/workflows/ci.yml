@@ -56,4 +56,4 @@ jobs:
           draft: false
           prerelease: false
 
-      - run: ${{toJson(steps.create_release)}}
+      - run: echo ${{toJson(steps.create_release)}} | true
