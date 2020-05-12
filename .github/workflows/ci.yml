@@ -31,15 +31,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5
-        with:
-          image_name: halvardssm/package-translation-fetch/translations
-          dockerfile: .github/Dockerfile
-          username: halvardssm
-          password: "${{ secrets.GITHUB_TOKEN }}"
-          registry: docker.pkg.github.com
-
       - name: Run Tests
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
@@ -60,16 +51,6 @@ jobs:
       - name: Version update detected
         if: steps.check.outputs.changed == 'true'
         run: 'echo "Version change found! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-
-      - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5
-        if: steps.check.outputs.changed == 'true'
-        with:
-          image_name: halvardssm/package-translation-fetch/translations
-          dockerfile: .github/Dockerfile
-          username: halvardssm
-          password: "${{ secrets.GITHUB_TOKEN }}"
-          registry: docker.pkg.github.com
           
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
