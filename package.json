@@ -14,10 +14,11 @@
 		"lint:fix": "eslint --ext .ts src --fix",
 		"pretest": "yarn build",
 		"test": "dist/bin.js",
-		"test:ts": "ts-node src/bin.ts"
+		"test:ts": "ts-node src/bin.ts",
+		"test:image": "yarn run build:image && docker run translations yarn test"
 	},
 	"dependencies": {
-		"commander": "^4.1.1",
+		"commander": "^5.1.0",
 		"dotenv": "^8.2.0",
 		"loglevel": "^1.6.8",
 		"node-fetch": "^2.6.0"
@@ -27,8 +28,8 @@
 		"@types/node-fetch": "^2.5.7",
 		"@typescript-eslint/eslint-plugin": "~2.31.0",
 		"@typescript-eslint/parser": "~2.31.0",
-		"eslint": "~6.7.0",
+		"eslint": "^6.8.0",
 		"ts-node": "^8.10.1",
-		"typescript": "^3.7.5"
+		"typescript": "^3.8.3"
 	}
 }
