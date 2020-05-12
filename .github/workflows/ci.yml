@@ -70,6 +70,4 @@ jobs:
           
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: docker run translations yarn publish 
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: docker run -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} translations yarn publish 
