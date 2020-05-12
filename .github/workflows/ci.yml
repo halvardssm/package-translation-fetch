@@ -61,4 +61,4 @@ jobs:
 
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: docker run -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn publish 
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 
