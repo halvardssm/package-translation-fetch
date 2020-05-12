@@ -24,7 +24,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
 
-      - run: docker ps
+      - run: docker image ls
 
   test:
     needs: build
