@@ -8,10 +8,11 @@
 	"types": "dist/bin.d.ts",
 	"bin": "./dist/bin.js",
 	"scripts": {
-		"build": "tsc && chmod +x ./dist/*",
+		"build": "yarn run lint && tsc && chmod +x ./dist/*",
+		"build:image": "docker build -t translations -f .github/Dockerfile .",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
-		"pretest": "npm run build",
+		"pretest": "yarn build",
 		"test": "dist/bin.js",
 		"test:ts": "ts-node src/bin.ts"
 	},

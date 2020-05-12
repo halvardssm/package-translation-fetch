@@ -15,30 +15,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js for NPM
-        uses: actions/setup-node@v1
+      - uses: whoan/docker-build-with-cache-action@v5
         with:
-          node-version: '14.x'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build package
-        run: npm build
-
-  lint:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: ESLint check
-        uses: Krizzu/eslint-check-action@v1.1.0
-        with:
-          ghToken: ${{ secrets.GITHUB_TOKEN }}
-          eslintFiles: "src"
-          eslintExt: "ts"
+          image_name: translations
+          dockerfile: .github/Dockerfile
 
   test:
     needs: build
@@ -47,19 +27,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js for NPM
-        uses: actions/setup-node@v1
+      - uses: whoan/docker-build-with-cache-action@v5
         with:
-          node-version: '14.x'
+          image_name: translations
+          dockerfile: .github/Dockerfile
 
-      - name: Install dependencies
-        run: npm install
-
-      # - name: Run tests
-      #   run: npm run test -- -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+      - name: ESLint check
+        run: docker run translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
-    needs: [ lint, test ]
+    needs: test
     runs-on: ubuntu-latest
     if: contains(github.ref, 'master')
     steps:
@@ -76,18 +53,14 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: 'echo "Version change found! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
 
-      - name: Set up Node.js for NPM
+      - uses: whoan/docker-build-with-cache-action@v5
         if: steps.check.outputs.changed == 'true'
-        uses: actions/setup-node@v1
         with:
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Install dependencies
-        if: steps.check.outputs.changed == 'true'
-        run: npm install
+          image_name: translations
+          dockerfile: .github/Dockerfile
 
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
-        run: npm publish
+        run: docker run translations yarn publish 
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
