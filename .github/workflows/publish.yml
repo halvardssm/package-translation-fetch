@@ -14,4 +14,4 @@ jobs:
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish package to NPM
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{ github.ref }} echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${GITHUB_REF##*/} echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 

@@ -23,7 +23,7 @@ jobs:
           username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
-          tag_name: ${{ github.ref }}
+          tag_name: ${{github.repository_owner}}_${GITHUB_REF##*/}
 
   test:
     needs: build
@@ -36,7 +36,7 @@ jobs:
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Tests
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{ github.ref }} yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${GITHUB_REF##*/} yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
@@ -62,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${GITHUB_REF##*/}
+          release_name: Release ${GITHUB_REF##*/}
           draft: false
           prerelease: false
