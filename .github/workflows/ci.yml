@@ -31,6 +31,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Login to GitHub Package Registry
+        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run Tests
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
@@ -52,6 +55,10 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: 'echo "Version change found! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
           
+      - name: Login to GitHub Package Registry
+        if: steps.check.outputs.changed == 'true'
+        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
         run: docker run -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn publish 
