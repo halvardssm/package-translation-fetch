@@ -19,7 +19,9 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          push_image_and_stages: false
+          username: whoan
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
 
   test:
     needs: build
@@ -32,7 +34,9 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          push_image_and_stages: false
+          username: whoan
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
 
       - name: ESLint check
         run: docker run translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
@@ -60,7 +64,9 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          push_image_and_stages: false
+          username: whoan
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
           
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
