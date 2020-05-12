@@ -19,6 +19,7 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
+          push_image_and_stages: false
 
   test:
     needs: build
@@ -31,6 +32,7 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
+          push_image_and_stages: false
 
       - name: ESLint check
         run: docker run translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
@@ -58,7 +60,8 @@ jobs:
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-
+          push_image_and_stages: false
+          
       - name: Publish package to NPM
         if: steps.check.outputs.changed == 'true'
         run: docker run translations yarn publish 
