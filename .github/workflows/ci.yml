@@ -25,9 +25,6 @@ jobs:
           registry: docker.pkg.github.com
           push_image_and_stages: false
 
-      - run: docker image ls
-      - run: echo ${{toJson(github.event)}}
-
       - name: Run Tests
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
@@ -42,8 +39,6 @@ jobs:
       - name: Check version changes
         uses: EndBug/version-check@v1
         id: check
-        with:
-          diff-search: true
 
       - name: Version update detected
         if: steps.check.outputs.changed == 'true'
@@ -55,7 +50,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${GITHUB_REF##*/}
-          release_name: Release ${GITHUB_REF##*/}
+          tag_name: ${{steps.check.outputs.version}}
+          release_name: Release ${{steps.check.outputs.version}}
           draft: false
           prerelease: false

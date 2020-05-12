@@ -10,8 +10,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login to GitHub Package Registry
-        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          image_name: halvardssm/package-translation-fetch/translations
+          dockerfile: .github/Dockerfile
+          username: halvardssm
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          push_git_tag: true
 
       - name: Publish package to NPM
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{github.repository_owner}}_${GITHUB_REF##*/} echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive 
