@@ -15,11 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          username: whoan
+          username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
 
@@ -30,15 +31,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          username: whoan
+          username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
 
-      - name: ESLint check
+      - name: Run Tests
         run: docker run translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
@@ -59,12 +61,13 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: 'echo "Version change found! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
 
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5
         if: steps.check.outputs.changed == 'true'
         with:
           image_name: translations
           dockerfile: .github/Dockerfile
-          username: whoan
+          username: halvardssm
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
           
