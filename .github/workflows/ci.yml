@@ -36,7 +36,7 @@ jobs:
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Tests
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${GITHUB_REF##*/} yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations:${{github.repository_owner}}_${GITHUB_REF##*/} yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   publish:
     needs: test
