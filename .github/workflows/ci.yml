@@ -45,6 +45,7 @@ jobs:
         run: 'echo "Version change found! Will run Release CI. New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
       
       - name: Create Release
+        if: steps.check.outputs.changed == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
