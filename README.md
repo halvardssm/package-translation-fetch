@@ -17,6 +17,14 @@ You can either pass command line arguments or use a `.env` file
 
 Only repo is mandatory if the repo containing translations is public, the translations are in the root folder, and you dont want to trigger the hooks. If a .env file exists, it will take default values from there and overwrite them with the cli arguments.
 
+Simply place `translation-fetch` in your scripts like this:
+
+```json
+"scripts": {
+  "translations": "translation-fetch",
+}
+```
+
 ### CLI Arguments
 
   `-r, --repo <repo>`      the translation repo id, on gitlab this is the project id while on github this is the owner+repo name. E.g. 1234567, package/translations\
