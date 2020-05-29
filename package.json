@@ -1,6 +1,6 @@
 {
 	"name": "translation-fetch",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"repository": "github.com/halvardssm/package-translation-fetch.git",
 	"author": "Halvard Mørstad <contact@moerstad.no>",
 	"license": "MIT",
@@ -11,14 +11,13 @@
 		"dist/*"
 	],
 	"scripts": {
-		"build": "yarn run lint && tsc && chmod +x ./dist/*",
-		"build:image": "docker build -t translations -f .github/Dockerfile .",
+		"build": "yarn && yarn run lint && tsc && chmod +x ./dist/*",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
+		"prepack": "yarn build",
 		"pretest": "yarn build",
 		"test": "dist/bin.js",
-		"test:ts": "ts-node src/bin.ts",
-		"test:image": "yarn run build:image && docker run translations yarn test"
+		"test:ts": "ts-node src/bin.ts"
 	},
 	"dependencies": {
 		"commander": "^5.1.0",
