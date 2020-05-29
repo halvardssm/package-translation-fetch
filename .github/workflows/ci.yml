@@ -26,7 +26,6 @@ jobs:
           push_image_and_stages: false
 
       - name: Get contents of home folder
-        if: steps.create_release.outcome == 'Success'
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations ls
 
       - name: Run Tests
