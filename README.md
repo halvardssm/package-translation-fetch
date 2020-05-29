@@ -21,7 +21,7 @@ Simply place `translation-fetch` in your scripts like this:
 
 ```json
 "scripts": {
-  "translations": "translation-fetch",
+  "translations": "translation-fetch"
 }
 ```
 
