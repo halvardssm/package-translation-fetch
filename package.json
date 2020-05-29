@@ -11,7 +11,7 @@
 		"dist/*"
 	],
 	"scripts": {
-		"build": "yarn run lint && tsc && chmod +x ./dist/*",
+		"build": "yarn && yarn run lint && tsc && chmod +x ./dist/*",
 		"build:image": "docker build -t translations -f .github/Dockerfile .",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
