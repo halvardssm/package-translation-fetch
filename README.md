@@ -15,7 +15,7 @@ To use this package you will need a [POEditor](https://poeditor.com/) account an
 
 You can either pass command line arguments or use a `.env` file
 
-Only repo is mandatory if the repo containing translations is public, the translations are in the root folder, and you dont want to trigger the hooks. If a .env file exists, it will take default values from there and overwrite them with the cli arguments.
+Only repo is mandatory if the repo containing translations is public, the translations are in the root folder, and you dont want to trigger the hooks. If a `.env` file exists, it will take default values from there and overwrite them with the cli arguments.
 
 Simply place `translation-fetch` in your scripts like this:
 
