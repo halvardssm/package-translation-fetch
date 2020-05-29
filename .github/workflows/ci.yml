@@ -14,22 +14,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5
-        with:
-          image_name: halvardssm/package-translation-fetch/translations
-          dockerfile: .github/Dockerfile
-          username: halvardssm
-          password: "${{ secrets.GITHUB_TOKEN }}"
-          registry: docker.pkg.github.com
-          push_image_and_stages: false
 
       - name: Run Tests
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
-      
-      - name: Run Tests
-        run: yarn --version
+        run: yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
 
   release:
     needs: test
