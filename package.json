@@ -1,13 +1,15 @@
 {
 	"name": "translation-fetch",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"repository": "github.com/halvardssm/package-translation-fetch.git",
 	"author": "Halvard Mørstad <contact@moerstad.no>",
 	"license": "MIT",
 	"main": "dist/bin.js",
 	"types": "dist/bin.d.ts",
-  "bin": "./dist/bin.js",
-  "files": ["dist/*"],
+	"bin": "./dist/bin.js",
+	"files": [
+		"dist/*"
+	],
 	"scripts": {
 		"build": "yarn run lint && tsc && chmod +x ./dist/*",
 		"build:image": "docker build -t translations -f .github/Dockerfile .",
