@@ -12,13 +12,12 @@
 	],
 	"scripts": {
 		"build": "yarn && yarn run lint && tsc && chmod +x ./dist/*",
-		"build:image": "docker build -t translations -f .github/Dockerfile .",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "eslint --ext .ts src --fix",
+    "prepack": "yarn build",
 		"pretest": "yarn build",
 		"test": "dist/bin.js",
-		"test:ts": "ts-node src/bin.ts",
-		"test:image": "yarn run build:image && docker run translations yarn test"
+		"test:ts": "ts-node src/bin.ts"
 	},
 	"dependencies": {
 		"commander": "^5.1.0",
