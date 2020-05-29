@@ -26,7 +26,7 @@ jobs:
           push_image_and_stages: false
 
       - name: Get contents of home folder
-        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations ls
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations ls dist
 
       - name: Run Tests
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations yarn test -p ${{ secrets.PATH }} -r ${{ secrets.REPO }} -t ${{ secrets.TOKEN }}
