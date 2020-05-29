@@ -6,7 +6,8 @@
 	"license": "MIT",
 	"main": "dist/bin.js",
 	"types": "dist/bin.d.ts",
-	"bin": "./dist/bin.js",
+  "bin": "./dist/bin.js",
+  "files": ["dist/*"],
 	"scripts": {
 		"build": "yarn run lint && tsc && chmod +x ./dist/*",
 		"build:image": "docker build -t translations -f .github/Dockerfile .",

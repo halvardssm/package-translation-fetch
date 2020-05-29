@@ -67,6 +67,10 @@ jobs:
           registry: docker.pkg.github.com
           push_git_tag: true
 
+      - name: Get contents of home folder
+        if: steps.create_release.outcome == 'Success'
+        run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations ls
+      
       - name: Publish package to NPM
         if: steps.create_release.outcome == 'Success'
         run: docker run docker.pkg.github.com/halvardssm/package-translation-fetch/translations echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --non-interactive
