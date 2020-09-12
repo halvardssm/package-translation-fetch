@@ -23,7 +23,7 @@
 		"commander": "^5.1.0",
 		"dotenv": "^8.2.0",
 		"loglevel": "^1.6.8",
-		"node-fetch": "^2.6.0"
+		"node-fetch": "^2.6.1"
 	},
 	"devDependencies": {
 		"@types/node": "^13.13.5",
