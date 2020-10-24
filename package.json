@@ -1,6 +1,6 @@
 {
 	"name": "translation-fetch",
-	"version": "0.2.0",
+	"version": "0.1.11",
 	"repository": "github.com/halvardssm/package-translation-fetch.git",
 	"author": "Halvard Mørstad <halvard@simplyundoable.com>",
 	"license": "MIT",
