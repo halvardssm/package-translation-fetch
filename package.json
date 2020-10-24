@@ -1,8 +1,8 @@
 {
 	"name": "translation-fetch",
-	"version": "0.1.11",
+	"version": "0.2.0",
 	"repository": "github.com/halvardssm/package-translation-fetch.git",
-	"author": "Halvard Mørstad <contact@moerstad.no>",
+	"author": "Halvard Mørstad <halvard@simplyundoable.com>",
 	"license": "MIT",
 	"main": "dist/bin.js",
 	"types": "dist/bin.d.ts",
@@ -20,18 +20,18 @@
 		"test:ts": "ts-node src/bin.ts"
 	},
 	"dependencies": {
-		"commander": "^5.1.0",
-		"dotenv": "^8.2.0",
-		"loglevel": "^1.6.8",
-		"node-fetch": "^2.6.0"
+		"commander": "~5.1.0",
+		"dotenv": "~8.2.0",
+		"loglevel": "~1.6.8",
+		"node-fetch": "~2.6.0"
 	},
 	"devDependencies": {
-		"@types/node": "^13.13.5",
-		"@types/node-fetch": "^2.5.7",
+		"@types/node": "~13.13.5",
+		"@types/node-fetch": "~2.5.7",
 		"@typescript-eslint/eslint-plugin": "~2.31.0",
 		"@typescript-eslint/parser": "~2.31.0",
-		"eslint": "^6.8.0",
-		"ts-node": "^8.10.1",
-		"typescript": "^3.8.3"
+		"eslint": "~6.8.0",
+		"ts-node": "~8.10.1",
+		"typescript": "~3.8.3"
 	}
 }
