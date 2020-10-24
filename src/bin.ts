@@ -68,7 +68,7 @@ export async function main(argv = process.argv): Promise<void> {
     .option(
       `-f, --${OPTION_FOLDER} <${OPTION_FOLDER}>`,
       "the download folder",
-      process.env.TRANS_PATH || "src/translations",
+      process.env.TRANS_FOLDER || "src/translations",
     )
     .option(
       `--${OPTION_HOOKS} <${OPTION_HOOKS}>`,
