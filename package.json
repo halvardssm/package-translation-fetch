@@ -1,7 +1,7 @@
 {
 	"name": "translation-fetch",
-	"version": "0.2.1",
-	"repository": "github.com/halvardssm/package-translation-fetch.git",
+	"version": "0.3.0",
+	"repository": "https://github.com/halvardssm/package-translation-fetch.git",
 	"author": "Halvard Mørstad <halvard@simplyundoable.com>",
 	"license": "MIT",
 	"main": "dist/bin.js",
@@ -17,7 +17,7 @@
 		"prepack": "yarn build",
 		"pretest": "yarn build",
 		"test": "dist/bin.js",
-		"test:ts": "ts-node src/bin.ts"
+		"test:ts": "ts-node src/bin.ts --help"
 	},
 	"dependencies": {
 		"commander": "~5.1.0",

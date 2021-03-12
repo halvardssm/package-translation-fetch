@@ -21,6 +21,18 @@ export interface ProgramOptions {
   folder: string;
   hooks?: string;
   token?: string;
+  branch: string;
+}
+
+export interface EnvironmentOptions {
+  LOCALES_REPO?: string;
+  LOCALES_PATH?: string;
+  LOCALES_HOOKS?: string;
+  LOCALES_HOST?: string;
+  LOCALES_TOKEN?: string;
+  LOCALES_FOLDER?: string;
+  LOCALES_ENV?: string;
+  LOCALES_BRANCH?: string;
 }
 
 export type ProgramCommander = ProgramOptions | commander.CommanderStatic;
@@ -31,11 +43,12 @@ const OPTION_HOOKS = "hooks";
 const OPTION_HOST = "host";
 const OPTION_TOKEN = "token";
 const OPTION_FOLDER = "folder";
-const OPTION_CONFIG = "config";
+const OPTION_ENV = "env";
+const OPTION_BRANCH = "branch";
 
 export async function main(argv = process.argv): Promise<void> {
   const configIndex = argv.findIndex((el) =>
-    el === "-c" || el === `--${OPTION_CONFIG}`
+    el === "-e" || el === `--${OPTION_ENV}`
   );
   let configPath = `${process.cwd()}/.env`;
 
@@ -52,36 +65,41 @@ export async function main(argv = process.argv): Promise<void> {
   commander
     .requiredOption(
       `-r, --${OPTION_REPO} <${OPTION_REPO}>`,
-      "the translation repo id, on gitlab this is the project id while on github this is the owner+repo name. E.g. 1234567, halvardssm/translations",
-      process.env.TRANS_REPO,
+      "the translation repo id, on gitlab this is the project id while on github this is the owner+repo name. E.g. 1234567, package/translations",
+      process.env.LOCALES_REPO,
     )
     .option(
       `-p, --${OPTION_PATH} <${OPTION_PATH}>`,
       "path to the folder containing the translations, if empty it will take the root",
-      process.env.TRANS_PATH || ".",
+      process.env.LOCALES_PATH || ".",
     )
     .option(
       `--${OPTION_HOST} <${OPTION_HOST}>`,
       "the git host, can be one of: github, gitlab",
-      process.env.TRANS_HOST || GIT_HOST_GITHUB,
+      process.env.LOCALES_HOST || GIT_HOST_GITHUB,
     )
     .option(
       `-f, --${OPTION_FOLDER} <${OPTION_FOLDER}>`,
       "the download folder",
-      process.env.TRANS_FOLDER || "src/translations",
+      process.env.LOCALES_FOLDER || "src/translations",
+    )
+    .option(
+      `-b, --${OPTION_BRANCH} <${OPTION_BRANCH}>`,
+      "the download folder",
+      process.env.LOCALES_BRANCH || "main",
     )
     .option(
       `--${OPTION_HOOKS} <${OPTION_HOOKS}>`,
       'string of webhook codes separated by space, ex: "123 123"',
-      process.env.TRANS_HOOKS,
+      process.env.LOCALES_HOOKS,
     )
     .option(
       `-t, --${OPTION_TOKEN} <${OPTION_TOKEN}>`,
       "the authentication token",
-      process.env.TRANS_TOKEN,
+      process.env.LOCALES_TOKEN,
     )
     .option(
-      `-c, --${OPTION_CONFIG} <${OPTION_CONFIG}>`,
+      `-e, --${OPTION_ENV} <${OPTION_ENV}>`,
       "path to the env file, defaults to ./.env",
       configPath,
     )

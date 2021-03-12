@@ -31,16 +31,18 @@ Simply place `translation-fetch` in your scripts like this:
   `-p, --path <path>`      path to the folder containing the translations, if empty it will take the root (default: "./")\
   `--host <host>`          the git host, can be one of: github, gitlab (default: "github")\
   `-f, --folder <folder>`  the download folder (default: "src/translations")\
+  `-b, --branch <branch>`  the download folder (default: "main")\
   `--hooks <hooks>`        string of webhook codes separated by space, ex: "123 123"\
   `-t, --token <token>`    the authentication token\
-  `-c, --config <config>`  path to the env file, defaults to ./.env (default: "./.env")\
-  `-h, --help`             output usage information\
+  `-e, --env <env>`        path to the env file, defaults to ./.env (default: "./.env")\
+  `-h, --help`             display help for command
 
 ### .env File
 
-TRANS_REPO=owner/translations\
-TRANS_PATH=test\
-TRANS_HOST=github\
-TRANS_FOLDER=translations\
-TRANS_HOOKS=asdf1234 asdf1324\
-TRANS_TOKEN=asdf1234asdf1234
+LOCALES_REPO=owner/translations\
+LOCALES_PATH=test\
+LOCALES_HOST=github\
+LOCALES_FOLDER=translations\
+LOCALES_HOOKS=asdf1234 asdf1324\
+LOCALES_TOKEN=asdf1234asdf1234\
+LOCALES_BRANCH=main

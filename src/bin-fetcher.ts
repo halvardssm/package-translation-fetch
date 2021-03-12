@@ -123,8 +123,10 @@ export default class Fetcher {
 
     const append = this._urlSwitch(
       {
-        gitlab: `${this.state.repo}/repository/tree?path=${this.state.path}`,
-        github: `${this.state.repo}/contents/${this.state.path}`,
+        gitlab:
+          `${this.state.repo}/repository/tree?path=${this.state.path}&ref=${this.state.branch}`,
+        github:
+          `${this.state.repo}/contents/${this.state.path}?ref=${this.state.branch}`,
       },
     );
 
@@ -155,8 +157,8 @@ export default class Fetcher {
 
       const append = this._urlSwitch(
         {
-          gitlab: `/repository/files/${fileUrl}/raw?ref=master`,
-          github: `/contents/${fileUrl}`,
+          gitlab: `/repository/files/${fileUrl}/raw?ref=${this.state.branch}`,
+          github: `/contents/${fileUrl}?ref=${this.state.branch}`,
         },
       );
 
