@@ -3,27 +3,45 @@
 ![CI](https://github.com/halvardssm/package-translation-fetch/workflows/CI/badge.svg)
 [![NPM version](https://img.shields.io/npm/v/translation-fetch.svg)](https://www.npmjs.com/package/translation-fetch)
 
-Download your POEditor translations as JSON to use with your favourite internationalization library.
+Download your translations as JSON to use with your favourite internationalization library. This library can also trigger webhooks from POEditor if this is needed. If you want support for other translation hosting platforms, please submit an issue or a PR.
 
 ## Instalation
 
-`yarn add -D translation-fetch` or `npm i -D translation-fetch`
+This library contains support for multiple languages, and if you wish to see your added, please submit an issue or a PR.
 
-## Usage
+### NPM
 
-To use this package you will need a [POEditor](https://poeditor.com/) account and have a repository connected to your translations see [FAQ](https://poeditor.com/kb/code-hosting-service-integrations). You will also need to add webhooks to each language for exporting to your repository. If you store the translations in a private repository, you will need a login token.
+Install the package via you favourite package manager.
 
-You can either pass command line arguments or use a `.env` file
+```shell
+# Yarn
+yarn add -D translation-fetch
 
-Only repo is mandatory if the repo containing translations is public, the translations are in the root folder, and you dont want to trigger the hooks. If a `.env` file exists, it will take default values from there and overwrite them with the cli arguments.
+# NPM
+npm i -D translation-fetch
+```
 
 Simply place `translation-fetch` in your scripts like this:
 
 ```json
 "scripts": {
-  "translations": "translation-fetch"
+  "translations": "translation-fetch [...optional args]"
 }
 ```
+
+## Usage
+
+To use this library, you need to have a repository with a translation folder containing translations. This can either be a dedicated translation repo, or for a different project. Currently this library only checks for `JSON` files, and regmatches on the file ending.
+
+You can also integrate a webhook calls for POEditor for syncing your translations see [FAQ](https://poeditor.com/kb/code-hosting-service-integrations). You will need to add webhooks to each language for syncing with your repository.
+
+If you store the translations in a private repository, you will need a login token.
+
+Currently only `GitHub` and `GitLab` are supported for hosing of the translation files.
+
+You can either pass command line arguments or use a `.env` file
+
+Only repo is mandatory if the repo containing translations is public, the translations are in the root folder, and you dont want to use hooks. If a `.env` file exists, it will take default values from there and overwrite them with the cli arguments.
 
 ### CLI Arguments
 
@@ -43,6 +61,6 @@ LOCALES_REPO=owner/translations\
 LOCALES_PATH=test\
 LOCALES_HOST=github\
 LOCALES_FOLDER=translations\
-LOCALES_HOOKS=asdf1234 asdf1324\
+LOCALES_HOOKS="asdf1234 asdf1324"\
 LOCALES_TOKEN=asdf1234asdf1234\
 LOCALES_BRANCH=main
